@@ -38,5 +38,6 @@ t_param		parse_args(int argc, char *argv[]);
 void		trace_syscall(pid_t pid);
 pid_t		fork_process(char *argv[]);
 pid_t		trace_process(pid_t pid);
+char		*get_syscall_name(int num);
 
 #endif /* !STRACE_H_ */

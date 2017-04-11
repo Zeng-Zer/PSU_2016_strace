@@ -16,6 +16,7 @@ SRC :=		main.c \
 		parse_args.c \
 		fork_process.c \
 		trace_syscall.c \
+		get_syscall_name.c \
 
 CC :=		gcc
 CFLAGS :=	-W -Wall -Wextra -g

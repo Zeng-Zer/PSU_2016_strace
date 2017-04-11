@@ -10,6 +10,11 @@
 
 #include "strace.h"
 
+static void			print_syscall(struct user_regs_struct *regs)
+{
+  fprintf(stderr, "syscall %s\n", get_syscall_name(regs->rax));
+}
+
 void				trace_syscall(pid_t pid)
 {
   int				status;
@@ -22,7 +27,7 @@ void				trace_syscall(pid_t pid)
       rip = ptrace(PTRACE_PEEKTEXT, pid, regs.rip, NULL);
       if (rip == SYSCALL)
 	{
-	  fprintf(stderr, "syscall %lld\n", (regs.rax & 0xffff));
+	  print_syscall(&regs);
 	}
       ptrace(PTRACE_SINGLESTEP, pid, NULL, NULL);
     }
