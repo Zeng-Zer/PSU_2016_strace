@@ -34,8 +34,16 @@ typedef struct	s_param
   char		**argv;
 }		t_param;
 
+typedef struct			s_proc
+{
+  pid_t				pid;
+  t_param			param;
+  struct user_regs_struct	regs;
+  int				status;
+}				t_proc;
+
 t_param		parse_args(int argc, char *argv[]);
-void		trace_syscall(pid_t pid);
+void		trace_syscall(pid_t pid, t_param param);
 pid_t		fork_process(char *argv[]);
 pid_t		trace_process(pid_t pid);
 char		*get_syscall_name(int num);

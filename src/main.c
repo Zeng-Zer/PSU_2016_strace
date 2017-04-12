@@ -16,7 +16,9 @@ void		handle_sig(int sig)
 {
   if (sig == SIGINT && g_pid != -1)
     {
+      ptrace(PTRACE_CONT, g_pid, NULL, NULL);
       ptrace(PTRACE_DETACH, g_pid, NULL, NULL);
+      exit(0);
     }
 }
 
@@ -40,6 +42,6 @@ int		main(int argc, char *argv[])
       pid = trace_process(param.pid);
       g_pid = pid;
     }
-  trace_syscall(pid);
+  trace_syscall(pid, param);
   return (0);
 }
