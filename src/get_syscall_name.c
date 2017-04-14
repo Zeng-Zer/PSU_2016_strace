@@ -777,7 +777,7 @@ char	*get_syscall_name(int num)
 int	get_syscall_number_params(int num)
 {
   int	i;
-  
+
   if (num < 0 || (unsigned long)num >= sizeof(g_syscalls) / sizeof(char*))
     return (-1);
   i = 0;
