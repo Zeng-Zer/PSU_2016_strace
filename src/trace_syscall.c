@@ -20,9 +20,8 @@ static void	print_param(t_proc *proc)
   int	i;
 
   i = get_syscall_number_params(proc->regs.rax);
-  if (i == -1) {
+  if (i == -1)
     return ;
-  }
   fprintf(stderr, "(");
   if (i-- > 0)
     fprintf(stderr, "0x%llx", proc->regs.rdi);
