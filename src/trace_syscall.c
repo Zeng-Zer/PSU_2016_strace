@@ -10,16 +10,21 @@
 
 #include "strace.h"
 
-static void	print_syscall(t_proc *proc)
+static void		print_syscall(t_proc *proc)
 {
-  fprintf(stderr, "%s", get_syscall_name(proc->regs.rax));
+  t_syscall_proto	sys;
+
+  sys = get_syscall_proto(proc->regs.rax);
+  fprintf(stderr, "%s", sys.name);
 }
 
 static void	print_param(t_proc *proc)
 {
+  t_syscall_proto	sys;
   int	i;
 
-  i = get_syscall_number_params(proc->regs.rax);
+  sys = get_syscall_proto(proc->regs.rax);
+  i = sys.argc;
   if (i == -1)
     return ;
   fprintf(stderr, "(");
@@ -30,7 +35,7 @@ static void	print_param(t_proc *proc)
   if (i-- > 0)
     fprintf(stderr, ", 0x%llx", proc->regs.rdx);
   if (i-- > 0)
-    fprintf(stderr, ", 0x%llx", proc->regs.r10);
+    fprintf(stderr, ", 0x%llx", proc->regs.rcx);
   if (i-- > 0)
     fprintf(stderr, ", 0x%llx", proc->regs.r8);
   if (i-- > 0)
@@ -40,10 +45,23 @@ static void	print_param(t_proc *proc)
 
 static void	print_ret(t_proc *proc)
 {
+  int		return_value;
+
+  return_value = -1;
+  if (proc->regs.rax == 231)
+    {
+      return_value = proc->regs.rdi;
+    }
   ptrace(PTRACE_SINGLESTEP, proc->pid, NULL, NULL);
   waitpid(proc->pid, &proc->status, 0);
   ptrace(PTRACE_GETREGS, proc->pid, NULL, &proc->regs);
-  fprintf(stderr, " = 0x%llx\n", proc->regs.rax);
+  if (return_value != -1)
+    {
+      fprintf(stderr, " = ?\n");
+      fprintf(stderr, "+++ exited with %d +++\n", return_value);
+    }
+  else
+    fprintf(stderr, " = 0x%llx\n", proc->regs.rax);
 }
 
 void		trace_syscall(pid_t pid, t_param param)

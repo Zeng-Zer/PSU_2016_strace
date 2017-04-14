@@ -29,6 +29,10 @@ pid_t	fork_process(char *argv[])
 
 pid_t	trace_process(pid_t pid)
 {
-  ptrace(PTRACE_ATTACH, pid, NULL, NULL);
+  if (ptrace(PTRACE_ATTACH, pid, NULL, NULL) == -1)
+    {
+      fprintf(stderr, "Attach error\n");
+      exit(1);
+    }
   return (pid);
 }

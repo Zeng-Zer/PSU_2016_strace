@@ -39,6 +39,7 @@ int		main(int argc, char *argv[])
     }
   else
     {
+      signal(SIGINT, &handle_sig);
       pid = trace_process(param.pid);
       g_pid = pid;
     }
