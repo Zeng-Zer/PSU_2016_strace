@@ -9,7 +9,6 @@
 */
 
 #include "strace.h"
-#include "proto.h"
 
 static pid_t	g_pid = -1;
 
